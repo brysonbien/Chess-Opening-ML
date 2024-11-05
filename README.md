@@ -1,7 +1,5 @@
 # Chess Opening ML CS 4641 Project
 
-## Repository Structure
-
 This repository contains all necessary files and directories for the Chess Opening Machine Learning project.
 
 ### Directories and Files
