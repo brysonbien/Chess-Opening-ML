@@ -1,2 +1,5 @@
 pandas==2.2.3
 streamlit==1.32.0
+matplotlib
+scikit-learn
+numpy
