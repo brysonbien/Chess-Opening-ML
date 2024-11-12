@@ -415,9 +415,9 @@ st.markdown(
 st.subheader("Next Steps")
 st.markdown(
     """
-    - Testing Additional Models: Experimenting with different algorithms may reveal new insights and potentially higher accuracy, especially if we implement hyperparameter tuning.
+    - Testing Additional Models/Hyperparameter Tuning: Experimenting with different algorithms may reveal new insights and potentially higher accuracy, especially if we implement hyperparameter tuning. Some of the results suggest that the models might be overfitting to the training data. By using Grid Search Cross Validation with more hyperparameters or exploring other cross validation methods for hyperparameter tuning, we might reduce this overfitting and improve model accuracy. Additionally, we plan on exploring additional ML models that might make better predictions from our data. Logistic regression might reveal linear patterns in our data, and could allow us to better understand which features have the most impact on predictions. Gradient boosting models like XGBoost might be less likely to overfit on our training data which could produce results with higher accuracy. 
     
-    - Improving Data Preprocessing: Using additional preprocessing steps could enhance model depth and accuracy.
+    - Improving Data Preprocessing: Using additional preprocessing steps could enhance model depth and accuracy. We will explore feature engineering to see how adding new features might affect model performance. One area that hasn't been explored is creating new features for specific opening moves. While the group decided to discard the feature describing all the moves in the game for the current models, creating new features for a select number of moves might reveal additional patterns that could improve predictions. 
     
     - Increase Data: Adding more data points might help generalize predictions better and reduce the risk of overfitting on current data.
     """
