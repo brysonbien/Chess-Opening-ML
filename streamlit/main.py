@@ -204,12 +204,17 @@ X = df.drop(['winner'], axis=1)
 y = df['winner']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 model = RandomForestClassifier()
-kfolds = KFold(n_splits=10)
-scores = cross_val_score(model, X_train, y_train, cv=kfolds)
-print("Accuracies: " + str(scores))
-print("Mean Accuracy: " + str(scores.mean()))
-st.write(f"Accuracies: {scores}")
-st.write(f"Mean Accuracy: {scores.mean()}")
+# kfolds = KFold(n_splits=10)
+# scores = cross_val_score(model, X_train, y_train, cv=kfolds)
+# print("Accuracies: " + str(scores))
+# print("Mean Accuracy: " + str(scores.mean()))
+# st.write(f"Accuracies: {scores}")
+# st.write(f"Mean Accuracy: {scores.mean()}")
+
+st.markdown("One of the outputs produced by K-Fold Cross Validation was:")
+st.markdown("Accuracies: [0.67102681 0.66317855 0.65075213 0.64094179 0.65206017 0.65336821 0.64790576 0.65183246 0.66950262 0.65510471]")
+st.markdown("Mean Accuracy: 0.6555673214878835")
+
 clf = RandomForestClassifier()
 clf.fit(X_train, y_train)
 
@@ -220,28 +225,34 @@ y_pca = df_pca['winner']
 X_train_pca, X_test_pca, y_train_pca, y_test_pca = train_test_split(X_pca, y_pca, test_size=0.2, random_state=42)
 model_pca = RandomForestClassifier()
 
-kfolds_pca = KFold(n_splits=10)
-scores_pca = cross_val_score(model_pca, X_train_pca, y_train_pca, cv=kfolds)
-print("Accuracies: " + str(scores_pca))
-print("Mean Accuracy: " + str(scores_pca.mean()))
-st.write(f"Accuracies: {scores_pca}")
-st.write(f"Mean Accuracy: {scores_pca.mean()}")
+# kfolds_pca = KFold(n_splits=10)
+# scores_pca = cross_val_score(model_pca, X_train_pca, y_train_pca, cv=kfolds)
+# print("Accuracies: " + str(scores_pca))
+# print("Mean Accuracy: " + str(scores_pca.mean()))
+# st.write(f"Accuracies: {scores_pca}")
+# st.write(f"Mean Accuracy: {scores_pca.mean()}")
+
+st.markdown("One of the outputs produced by K-Fold Cross Validation was:")
+st.markdown("Accuracies: [0.55461086 0.56638326 0.52975801 0.58011772 0.5794637  0.55330281 0.55431937 0.57002618 0.58115183 0.56609948]")
+st.markdown("Mean Accuracy: 0.5635233222275107")
+
 clf_pca = RandomForestClassifier()
 clf_pca.fit(X_train_pca, y_train_pca)
 
 
 st.subheader("Fitting Model with Best Hyperparameters")
 st.markdown("#### Grid Search Cross Validation")
-param_grid = {
-    'n_estimators': [100, 200],
-    'max_depth': [10, 20, None],
-    'max_features': ['sqrt', 'log2'],
-    'min_samples_split': [2, 5],    
-    'min_samples_leaf': [1, 2]            
-}
-grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, n_jobs=-1, verbose=0)
-grid_search.fit(X_train, y_train)
-st.write("**Best Hyperparameters:**", grid_search.best_params_)
+# param_grid = {
+#     'n_estimators': [100, 200],
+#     'max_depth': [10, 20, None],
+#     'max_features': ['sqrt', 'log2'],
+#     'min_samples_split': [2, 5],    
+#     'min_samples_leaf': [1, 2]            
+# }
+# grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, n_jobs=-1, verbose=0)
+# grid_search.fit(X_train, y_train)
+# st.write("**Best Hyperparameters:**", grid_search.best_params_)
+st.markdown("The best parameters we found with Grid Search Cross Validation were: 'max_depth': 20, 'max_features': 'log2', 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 200")
 
 X_grid = df.drop('winner', axis=1)
 y_grid = df['winner']
@@ -249,12 +260,17 @@ X_train_grid, X_test_grid, y_train_grid, y_test_grid = train_test_split(X, y, te
 st.markdown('#### Cross Validation: Perform K-Fold cross validation to verify the generalizability of the predictions.')
 model_grid = RandomForestClassifier(max_depth=20, max_features='log2', min_samples_leaf=1, min_samples_split=5, n_estimators=200)
 
-kfolds_grid = KFold(n_splits=10)
-scores_grid = cross_val_score(model_grid, X_train_grid, y_train_grid, cv=kfolds_grid)
-print("Accuracies: " + str(scores_grid))
-print("Mean Accuracy: " + str(scores_grid.mean()))
-st.write(f"Accuracies: {scores_grid}")
-st.write(f"Mean Accuracy: {scores_grid.mean()}")
+# kfolds_grid = KFold(n_splits=10)
+# scores_grid = cross_val_score(model_grid, X_train_grid, y_train_grid, cv=kfolds_grid)
+# print("Accuracies: " + str(scores_grid))
+# print("Mean Accuracy: " + str(scores_grid.mean()))
+# st.write(f"Accuracies: {scores_grid}")
+# st.write(f"Mean Accuracy: {scores_grid.mean()}")
+
+st.markdown("One of the outputs produced by K-Fold Cross Validation was:")
+st.markdown("Accuracies: Accuracies: [0.66971877 0.66841073 0.65206017 0.64879006 0.6618705  0.67233486 0.65772251 0.65314136 0.66688482 0.65575916]")
+st.markdown("Mean Accuracy: 0.6606692941696144")
+
 clf_grid = RandomForestClassifier(max_depth=20, max_features='log2', min_samples_leaf=1, min_samples_split=5, n_estimators=200)
 clf_grid.fit(X_train_grid, y_train_grid)
 
