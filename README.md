@@ -1,23 +1,32 @@
 # Chess Opening ML CS 4641 Project
 
-This repository contains all necessary files and directories for the Chess Opening Machine Learning project.
+## Overview
+This project explores machine learning techniques to analyze and predict outcomes of chess games based on openings.
 
-### Directories and Files
+This repository contains all necessary files and directories for the Chess Opening Machine Learning project, including preprocessing steps, model training, analysis, and visualization.
 
-- **/archive/**: Directory containing the notebook for the original dataset.
-  - `/archive/old_notebook.ipynb`: Old Jupyter notebook for a mid-project check and initial model training code.
-  - `/archive/midterm_checkpoint.ipynb`: Final Junpyter notebook that was used for midterm checkpoint.
-    
-- **/data/**: Directory containing datasets used for training and evaluation.
-  - `/data/games.csv`: Contains game data with various features for each chess game.
-  - `/data/high_elo_opening.csv`: Dataset specifically filtered for high ELO chess openings.
+## Directories and Files
 
-- **/streamlit/**: Directory for Streamlit-related files, used to create an interactive web application.
-  - `/streamlit/main.py`: Main script for the Streamlit app to visualize and interact with the model.
-  - `/streamlit/requirements.txt`: Lists all dependencies required to run the Streamlit app.
+### `/archive/`
+Contains earlier notebooks and midterm checkpoint files:
+- `old_notebook.ipynb`: Initial notebook with early experimentation and mid-project model training.
+- `midterm_checkpoint.ipynb`: Notebook used to present progress at the midterm checkpoint.
 
-- **final_report.ipynb**: Jupyter notebook for the final report, summarizing progress, final analysis, and insights from the data.
+### `/data/`
+Holds datasets for training, evaluation, and filtering:
+- `games.csv`: Chess game data containing features like player ratings, moves, and outcomes.
+- `high_elo_opening.csv`: Dataset specifically filtered for high ELO games, focusing on advanced openings.
 
-- **testing.ipynb**: Jupyter notebook for testing and documenting how various attempted preprocessing methods impact model performance.
+### `/streamlit/`
+Includes files for building an interactive web app to visualize the model results:
+- `main.py`: Streamlit app script for real-time interaction and visualization.
+- `requirements.txt`: Dependency list for running the Streamlit application.
 
-- **README.md**: Provides an overview of the project, including descriptions of the repository structure and each file.
+### `final_report.ipynb`
+The main Jupyter notebook summarizing the project's progress, analysis, and final model evaluation.
+
+### `testing.ipynb`
+A notebook dedicated to testing various preprocessing methods and their impact on model performance.
+
+### `README.md`
+Provides an updated overview of the project, explaining the repository structure, files, and directories.
