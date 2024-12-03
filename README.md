@@ -19,7 +19,12 @@ Holds datasets for training, evaluation, and filtering:
 
 ### `/streamlit/`
 Includes files for building an interactive web app to visualize the model results:
+- `/data/`
+    - `games.csv`: Chess game data containing features like player ratings, moves, and outcomes.
+    - `high_elo_opening.csv`: Dataset specifically filtered for high ELO games, focusing on advanced openings.
 - `main.py`: Streamlit app script for real-time interaction and visualization.
+- `midtermreport.py`: Stores streamlit app submitted for midterm checkpoint.
+- `proposal.py`: Stores streamlit app submitted for project proposal.
 - `requirements.txt`: Dependency list for running the Streamlit application.
 
 ### `final_report.ipynb`
