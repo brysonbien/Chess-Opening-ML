@@ -142,11 +142,13 @@ st.markdown(
 st.markdown('#### Prediction Based on Features')
 st.markdown(
     """
-    **Opening Move Names and Other Features:** By using models like a Random Forest Classifier, we can make predictions about the binary outcomes of chess games. This will help evaluate how well opening names and related attributes contribute to predicting game outcomes.
+    **Opening Move Names and Other Features:** By using models like a Random Forest Classifier and XGBoost, we can make predictions about the binary outcomes of chess games. This will help evaluate how well opening names and related attributes contribute to predicting game outcomes.
 
-    Further, Grid Search Cross Validation can be used to find the best hyperparameters for the Random Forest Classifier, which might produce predictions with higher accuracy.
+    Further, Grid Search Cross Validation can be used to find the best hyperparameters for the Random Forest Classifier and XGBoost, which might produce predictions with higher accuracy.
 
     **Dataset Reduced with PCA:** Reduced features from PCA will be tested in the predictive model to assess if condensed data retains sufficient information for accurate predictions.
+
+    **GMM:** Using GMM to cluster chess games could produce labels that might improve model accuracy when added as features to the dataset.
     """
 )
 
@@ -156,10 +158,14 @@ st.markdown(
     """
     In order to process our data so it can be used to train our machine learning models, we started by performing manual dimensionality reduction to remove features that were irrelevant or not accessible before a chess game is over. This included features like player ids or number of moves in the game. We modified the ‘opening_name’ feature to include only the primary opening strategy. We also used feature engineering to create 10 new features to store the first 5 opening moves of either side, unless an opening had fewer moves. We then tried creating a feature to represent the difference between white and black performance ratings.
     Next, we used a labelencoder to encode several non-numerical features. One-hot encoding was not feasible since these features contained many unique values. Additionally, we planned on using a random forest classifier, which would treat these labels as separate categories. After this initial processing, we used a correlation matrix to determine whether any features were highly correlated, which could indicate that they were redundant and some could be removed. The feature ‘moves’ was removed because it was highly correlated with ‘opening_name’ and included information that could only be obtained after a game was over.
-    Some additional preprocessing approaches were tested, but none of them seemed to show significant improvements in evaluation metrics. We tried several approaches for incorporating averages of different openings’ performance across the dataset. First we grouped data points by their opening names and calculated the mean of games won by the black side (this was performed on the training set and these averages were applied to the test set to avoid data leakage). Next we tried using a second dataset that contained information about average performances of different opening moves. Neither of these two approaches were included in our final report notebook, but were still documented in the file testing.ipynb. 
     """
 )
 
+st.markdown(
+    """
+    Some additional preprocessing approaches were tested, but none of them seemed to show significant improvements in evaluation metrics. We tried several approaches for incorporating averages of different openings’ performance across the dataset. First we grouped data points by their opening names and calculated the mean of games won by the black side (this was performed on the training set and these averages were applied to the test set to avoid data leakage). Next we tried using a second dataset that contained information about average performances of different opening moves. Neither of these two approaches were included in our final report notebook, but were still documented in the file testing.ipynb. 
+    """
+)
 
 st.markdown(
     """
@@ -285,6 +291,11 @@ model = RandomForestClassifier()
 
 clf = RandomForestClassifier()
 clf.fit(X_train, y_train)
+
+train_accuracy = clf.score(X_train, y_train)
+print("Train Score: " + str(train_accuracy))
+test_accuracy = clf.score(X_test, y_test)
+print("Test Score: " + str(test_accuracy))
 
 y_pred = clf.predict(X_test)
 precision = precision_score(y_test, y_pred)
@@ -426,6 +437,7 @@ from sklearn.mixture import GaussianMixture
 # Apply GMM to generate cluster labels
 gmm = GaussianMixture(n_components=3, random_state=42)
 gmm_labels = gmm.fit_predict(X_scaled)
+df['gmm_labels'] = gmm_labels
 X_augmented = df_pca.drop(columns=['winner'])
 y_augmented = df_pca['winner']
 from sklearn.decomposition import PCA
@@ -607,13 +619,17 @@ st.markdown(
 
 # Basic Model
 st.write("### Basic Model")
+st.write("Train Accuracy:", train_accuracy)
+st.write("Test Accuracy:", test_accuracy)
+
+st.write("**K-Fold Cross Validation Results:**")
 st.write("Mean Accuracy: **65.85%**")
 st.write("Accuracies:", [0.6658, 0.6632, 0.6560, 0.6409, 0.6573, 0.6534, 0.6649, 0.6492, 0.6760, 0.6584])
 classification_report_basic = {
     "": ["Precision", "Recall", "F1-Score", "Support"],
     "Black": [0.64, 0.63, 0.64, 1832],
     "White": [0.67, 0.68, 0.67, 1990],
-    "Overall": ["", "", "Accuracy: 66%", 3822],
+    "Overall": ["", "", "Accuracy: ~66%", 3822],
 }
 st.table(pd.DataFrame(classification_report_basic).set_index(""))
 
@@ -628,13 +644,17 @@ st.markdown(
 
 # PCA-Reduced Model
 st.write("### PCA-Reduced Dataset")
+st.write("Train Accuracy:", train_accuracy_pca)
+st.write("Test Accuracy:", test_accuracy_pca)
+
+st.write("**K-Fold Cross Validation Results:**")
 st.write("Mean Accuracy: **56.53%**")
 st.write("Accuracies:", [0.5605, 0.5644, 0.5612, 0.5683, 0.5500, 0.5566, 0.5713, 0.5759, 0.5818, 0.5628])
 classification_report_pca = {
     "": ["Precision", "Recall", "F1-Score", "Support"],
     "Black": [0.56, 0.53, 0.55, 1832],
     "White": [0.59, 0.62, 0.60, 1990],
-    "Overall": ["", "", "Accuracy: 58%", 3822],
+    "Overall": ["", "", "Accuracy: ~58%", 3822],
 }
 st.table(pd.DataFrame(classification_report_pca).set_index(""))
 
@@ -649,13 +669,17 @@ st.markdown(
 
 # Hyperparameter-Tuned Model
 st.write("### Best Hyperparameters")
+st.write("Train Accuracy:", train_accuracy_grid)
+st.write("Test Accuracy:", test_accuracy_best)
+
+st.write("**K-Fold Cross Validation Results:**")
 st.write("Mean Accuracy: **66.23%**")
 st.write("Accuracies:", [0.6763, 0.6566, 0.6540, 0.6494, 0.6651, 0.6573, 0.6721, 0.6551, 0.6747, 0.6623])
 classification_report_tuned = {
     "": ["Precision", "Recall", "F1-Score", "Support"],
     "Black": [0.65, 0.62, 0.64, 1832],
     "White": [0.67, 0.70, 0.68, 1990],
-    "Overall": ["", "", "Accuracy: 66%", 3822],
+    "Overall": ["", "", "Accuracy: ~66%", 3822],
 }
 st.table(pd.DataFrame(classification_report_tuned).set_index(""))
 
@@ -703,14 +727,20 @@ best_params = {
     "subsample": 0.6,
 }
 st.write(pd.DataFrame.from_dict(best_params, orient="index", columns=["Value"]))
+st.write("Train Accuracy:", train_accuracy_xg)
+st.write("Test Accuracy:", test_accuracy_xg)
 
-st.write("Accuracies:", [0.6521, 0.6552, 0.6530, 0.6474, 0.6638, 0.6502, 0.6601, 0.6583, 0.6619, 0.6510])
+
+st.write("**K-Fold Cross Validation Results:**")
+
+st.write("Mean Accuracy: **0.65**")
+st.write("Accuracies:", [0.6566, 0.6534, 0.6364, 0.6331, 0.6455, 0.6370, 0.6636, 0.6440, 0.6702, 0.6505])
 
 classification_report_xgb = {
     "": ["Precision", "Recall", "F1-Score", "Support"],
     "Black": [0.64, 0.60, 0.62, 1832],
     "White": [0.66, 0.70, 0.68, 1990],
-    "Overall": ["", "", "Accuracy: 65%", 3822],
+    "Overall": ["", "", "Accuracy: ~65%", 3822],
 }
 st.table(pd.DataFrame(classification_report_xgb).set_index(""))
 
@@ -726,8 +756,8 @@ st.header("Analysis and Comparison of Models")
 st.markdown(
     """
     **Model Performance:**
-    - Random Forest with Hyperparameter Tuning achieved the highest accuracy (~66.23%) and balanced precision/recall.
-    - XGBoost performed slightly lower at (~65.%) accuracy but was efficient in handling large datasets.
+    - Random Forest with Hyperparameter Tuning achieved the highest accuracy (~66%) and balanced precision/recall.
+    - XGBoost performed slightly lower at (~65%) accuracy but was efficient in handling large datasets.
     - PCA-Reduced Random Forest demonstrated the weakest performance, highlighting the importance of feature engineering.
 
     **Key Insights:**
